@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ishwarya — B.Tech CSE student and app developer portfolio.">
+<title>Ishwarya | 3D Developer Portfolio</title>
+<style>
+:root{
+  --bg:#050816; --panel:rgba(13,20,43,.72); --line:rgba(145,170,255,.18);
+  --text:#f4f7ff; --muted:#aab5d6; --cyan:#64e7ff; --violet:#9b7cff;
+  --pink:#ff76c8; --green:#7dffb2; --shadow:0 25px 80px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);background:var(--bg);overflow-x:hidden;line-height:1.6;
+}
+body:before{
+  content:"";position:fixed;inset:0;z-index:-5;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(100,231,255,.12),transparent 25%),
+    radial-gradient(circle at 85% 30%,rgba(155,124,255,.13),transparent 28%),
+    radial-gradient(circle at 50% 90%,rgba(255,118,200,.08),transparent 30%),
+    linear-gradient(180deg,#050816,#070b1d 55%,#03050e);
+}
+canvas#stars{position:fixed;inset:0;z-index:-4;opacity:.8}
+.grid{
+  position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.22;
+  background-image:linear-gradient(rgba(100,231,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(100,231,255,.09) 1px,transparent 1px);
+  background-size:60px 60px;transform:perspective(500px) rotateX(58deg) translateY(30%);transform-origin:center bottom;
+}
+a{color:inherit;text-decoration:none}
+.container{width:min(1160px,92%);margin:auto}
+nav{
+  position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:20;
+  width:min(1120px,92%);padding:12px 14px;border:1px solid var(--line);
+  border-radius:20px;background:rgba(5,8,22,.68);backdrop-filter:blur(18px);
+  box-shadow:0 10px 45px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-weight:900;letter-spacing:.08em}.logo span{color:var(--cyan)}
+.navlinks{display:flex;gap:6px;align-items:center}
+.navlinks a{padding:9px 13px;color:var(--muted);font-size:.9rem;border-radius:12px;transition:.25s}
+.navlinks a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.menu{display:none;border:0;background:none;color:#fff;font-size:1.4rem}
+.hero{min-height:100vh;display:grid;place-items:center;padding:120px 0 70px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(100,231,255,.25);
+  background:rgba(100,231,255,.07);color:#c9f8ff;padding:8px 12px;border-radius:999px;
+  font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 15px var(--green)}
+h1{font-size:clamp(3.2rem,7vw,6.8rem);line-height:.9;letter-spacing:-.07em;margin:22px 0}
+.gradient{background:linear-gradient(100deg,#fff 15%,var(--cyan) 48%,var(--violet) 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:650px;color:var(--muted);font-size:1.08rem}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 18px;border-radius:14px;
+  border:1px solid var(--line);background:rgba(255,255,255,.045);transition:.25s;font-weight:700
+}
+.btn.primary{background:linear-gradient(135deg,var(--cyan),var(--violet));color:#07101b;border:0;box-shadow:0 10px 35px rgba(100,231,255,.18)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,.3)}
+.scene{height:500px;display:grid;place-items:center;perspective:1000px}
+.orb{
+  width:310px;height:310px;border-radius:50%;position:relative;transform-style:preserve-3d;
+  background:radial-gradient(circle at 32% 25%,#dffcff 0 2%,#64e7ff 8%,#4d54ff 38%,#24135b 68%,#070817 75%);
+  box-shadow:0 0 45px rgba(100,231,255,.35),0 0 130px rgba(155,124,255,.22);
+  animation:float 5s ease-in-out infinite;
+}
+.orb:before,.orb:after{content:"";position:absolute;inset:-35px;border:1px solid rgba(100,231,255,.35);border-radius:50%;transform:rotateX(68deg) rotateZ(18deg)}
+.orb:after{inset:-60px;border-color:rgba(255,118,200,.25);transform:rotateY(67deg) rotateZ(-20deg)}
+.orb .core{position:absolute;inset:80px;border-radius:50%;background:radial-gradient(circle,#fff,#8ff4ff 12%,transparent 60%);filter:blur(2px);opacity:.7}
+.orb .tag{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateZ(70px);
+  width:190px;text-align:center;font-weight:900;letter-spacing:.16em;font-size:1.05rem
+}
+@keyframes float{50%{transform:translateY(-18px) rotateY(8deg) rotateX(-4deg)}}
+section{padding:105px 0}
+.section-head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:30px}
+.eyebrow{color:var(--cyan);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;font-weight:800}
+h2{font-size:clamp(2rem,4vw,3.3rem);letter-spacing:-.05em;margin-top:6px}
+.section-head p{max-width:500px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{
+  padding:25px;border:1px solid var(--line);border-radius:22px;background:var(--panel);
+  backdrop-filter:blur(14px);box-shadow:var(--shadow);transform-style:preserve-3d;transition:transform .15s,border .25s
+}
+.card:hover{border-color:rgba(100,231,255,.35)}
+.icon{font-size:1.8rem;margin-bottom:18px}
+.card h3{margin-bottom:7px}.card p{color:var(--muted);font-size:.94rem}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.tagpill{padding:5px 9px;border-radius:999px;background:rgba(100,231,255,.07);border:1px solid rgba(100,231,255,.12);color:#c5f7ff;font-size:.72rem}
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.project{
+  min-height:300px;padding:26px;border:1px solid var(--line);border-radius:25px;overflow:hidden;position:relative;
+  background:linear-gradient(135deg,rgba(18,27,56,.9),rgba(8,12,30,.75));transition:.3s
+}
+.project:after{content:"";position:absolute;width:230px;height:230px;right:-80px;top:-80px;border-radius:50%;background:radial-gradient(circle,rgba(100,231,255,.22),transparent 65%)}
+.project:hover{transform:translateY(-7px);border-color:rgba(100,231,255,.3)}
+.project-num{font-size:.7rem;color:var(--cyan);letter-spacing:.2em}
+.project h3{font-size:1.55rem;margin:30px 0 10px}.project p{color:var(--muted);max-width:520px}
+.project .fake-ui{margin-top:25px;border:1px solid var(--line);border-radius:16px;padding:12px;background:rgba(0,0,0,.2)}
+.bars{display:flex;gap:8px;align-items:end;height:55px}.bars i{display:block;flex:1;border-radius:5px 5px 0 0;background:linear-gradient(to top,var(--violet),var(--cyan));height:var(--h)}
+.skills{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.skillbox{border:1px solid var(--line);padding:22px;border-radius:20px;background:var(--panel)}
+.skillline{display:flex;justify-content:space-between;color:#dfe5ff;margin-bottom:9px;font-size:.9rem}
+.track{height:8px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}.fill{height:100%;width:var(--w);background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:inherit}
+.timeline{position:relative;margin-top:25px;padding-left:25px;border-left:1px solid var(--line)}
+.timeitem{position:relative;padding:0 0 30px 22px}.timeitem:before{content:"";position:absolute;left:-31px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px var(--cyan)}
+.timeitem small{color:var(--cyan);letter-spacing:.1em}.timeitem p{color:var(--muted);margin-top:5px}
+.contact{
+  display:grid;grid-template-columns:1fr .9fr;gap:20px;padding:30px;border:1px solid var(--line);
+  border-radius:28px;background:linear-gradient(135deg,rgba(16,25,54,.8),rgba(8,12,29,.8))
+}
+.contact h3{font-size:2rem;margin:10px 0}.contact p{color:var(--muted)}
+.contact-card{padding:22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025);margin-top:12px}
+footer{padding:35px 0 55px;color:#7782a4;text-align:center;font-size:.85rem}
+.cursor{position:fixed;width:18px;height:18px;border:1px solid rgba(100,231,255,.7);border-radius:50%;pointer-events:none;z-index:99;transform:translate(-50%,-50%);transition:width .15s,height .15s;mix-blend-mode:screen}
+.reveal{opacity:0;transform:translateY(25px);transition:opacity .7s,transform .7s}.reveal.show{opacity:1;transform:none}
+@media(max-width:820px){
+  nav{top:10px}.navlinks{display:none}.navlinks.open{display:flex;position:absolute;top:60px;left:0;right:0;flex-direction:column;background:rgba(5,8,22,.96);padding:12px;border:1px solid var(--line);border-radius:15px}.menu{display:block}
+  .hero-grid,.contact{grid-template-columns:1fr}.scene{height:390px;order:-1}.orb{width:250px;height:250px}
+  .cards,.projects{grid-template-columns:1fr}.skills{grid-template-columns:1fr}.section-head{display:block}.section-head p{margin-top:12px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas><div class="grid"></div><div class="cursor" id="cursor"></div>
+
+<nav>
+  <a class="logo" href="#home">ISH<span>WARYA</span>.</a>
+  <div class="navlinks" id="navlinks">
+    <a href="#about">About</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#journey">Journey</a><a href="#contact">Contact</a>
+  </div>
+  <button class="menu" id="menu" aria-label="Open menu">☰</button>
+</nav>
+
+<main>
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <span class="badge"><i class="dot"></i> Available for learning & building</span>
+      <h1>Building ideas<br><span class="gradient">into apps.</span></h1>
+      <p>Hi, I'm <strong>Ishwarya</strong> — a B.Tech 2nd-year Computer Science & Engineering student and aspiring App Developer. I love turning curious ideas into clean, useful digital experiences.</p>
+      <div class="actions"><a class="btn primary" href="#projects">Explore my work ↗</a><a class="btn" href="#contact">Let's connect</a></div>
+    </div>
+    <div class="scene reveal">
+      <div class="orb"><div class="core"></div><div class="tag">APP<br>DEVELOPER</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+<div class="container">
+  <div class="section-head reveal"><div><div class="eyebrow">01 / Profile</div><h2>More than a student.</h2></div><p>I'm building my foundation in computer science while exploring mobile apps, UI/UX, problem solving and modern web technologies.</p></div>
+  <div class="cards">
+    <article class="card tilt reveal"><div class="icon">🎓</div><h3>CSE Student</h3><p>B.Tech, 2nd Year — Computer Science & Engineering. Learning by building, experimenting and solving problems.</p><div class="tags"><span class="tagpill">CSE</span><span class="tagpill">B.Tech</span></div></article>
+    <article class="card tilt reveal"><div class="icon">📱</div><h3>App Developer</h3><p>Interested in creating intuitive applications that feel simple, fast and genuinely useful to people.</p><div class="tags"><span class="tagpill">Mobile</span><span class="tagpill">UI/UX</span></div></article>
+    <article class="card tilt reveal"><div class="icon">🚀</div><h3>Always Learning</h3><p>Exploring new technologies, improving coding fundamentals and turning small ideas into portfolio-ready projects.</p><div class="tags"><span class="tagpill">Problem Solving</span><span class="tagpill">Growth</span></div></article>
+  </div>
+</div>
+</section>
+
+<section id="projects">
+<div class="container">
+  <div class="section-head reveal"><div><div class="eyebrow">02 / Missions</div><h2>Projects from my lab.</h2></div><p>Concept projects designed around real student and everyday-use problems. Replace these with your actual GitHub projects as you build them.</p></div>
+  <div class="projects">
+    <article class="project tilt reveal"><span class="project-num">MISSION 01</span><h3>Campus Companion</h3><p>A student-focused app concept for schedules, reminders, campus events and quick academic resources.</p><div class="fake-ui"><small>WEEKLY PRODUCTIVITY</small><div class="bars"><i style="--h:35%"></i><i style="--h:55%"></i><i style="--h:46%"></i><i style="--h:78%"></i><i style="--h:62%"></i><i style="--h:90%"></i><i style="--h:72%"></i></div></div></article>
+    <article class="project tilt reveal"><span class="project-num">MISSION 02</span><h3>Smart Notes</h3><p>A clean notes and study planner concept that organizes subjects, topics, tasks and revision goals in one place.</p><div class="fake-ui"><small>STUDY PROGRESS</small><div class="skillline" style="margin-top:13px"><span>Java</span><span>72%</span></div><div class="track"><div class="fill" style="--w:72%"></div></div></div></article>
+    <article class="project tilt reveal"><span class="project-num">MISSION 03</span><h3>Expense Buddy</h3><p>A simple mobile-first finance tracker concept for students to understand daily spending and monthly goals.</p><div class="tags"><span class="tagpill">Dashboard</span><span class="tagpill">Charts</span><span class="tagpill">Mobile UI</span></div></article>
+    <article class="project tilt reveal"><span class="project-num">MISSION 04</span><h3>Portfolio 3D</h3><p>This interactive portfolio itself: a game-inspired interface with depth, motion, responsive layout and a futuristic visual system.</p><div class="tags"><span class="tagpill">HTML</span><span class="tagpill">CSS</span><span class="tagpill">JavaScript</span></div></article>
+  </div>
+</div>
+</section>
+
+<section id="skills">
+<div class="container">
+  <div class="section-head reveal"><div><div class="eyebrow">03 / Loadout</div><h2>My current toolkit.</h2></div><p>These are presented as a portfolio snapshot, not fixed ratings. Update them as your skills grow.</p></div>
+  <div class="skills">
+    <div class="skillbox reveal"><div class="skillline"><span>Java</span><span>Learning</span></div><div class="track"><div class="fill" style="--w:72%"></div></div></div>
+    <div class="skillbox reveal"><div class="skillline"><span>HTML & CSS</span><span>Strong foundation</span></div><div class="track"><div class="fill" style="--w:86%"></div></div></div>
+    <div class="skillbox reveal"><div class="skillline"><span>JavaScript</span><span>Learning</span></div><div class="track"><div class="fill" style="--w:64%"></div></div></div>
+    <div class="skillbox reveal"><div class="skillline"><span>App Development</span><span>Exploring</span></div><div class="track"><div class="fill" style="--w:68%"></div></div></div>
+  </div>
+</div>
+</section>
+
+<section id="journey">
+<div class="container">
+  <div class="section-head reveal"><div><div class="eyebrow">04 / Journey</div><h2>Leveling up, one step at a time.</h2></div><p>A simple roadmap for the next stages of my developer journey.</p></div>
+  <div class="timeline">
+    <div class="timeitem reveal"><small>NOW · LEVEL 02</small><h3>B.Tech CSE — 2nd Year</h3><p>Strengthening programming fundamentals, data structures, Java and web development.</p></div>
+    <div class="timeitem reveal"><small>NEXT · LEVEL 03</small><h3>Build real applications</h3><p>Create polished mobile and web projects, publish them and learn from user feedback.</p></div>
+    <div class="timeitem reveal"><small>FUTURE · LEVEL 04</small><h3>Developer portfolio → industry</h3><p>Contribute to meaningful projects, grow technical depth and prepare for internships.</p></div>
+  </div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+  <div class="contact reveal">
+    <div><div class="eyebrow">05 / Connect</div><h3>Have an idea worth building?</h3><p>I'm always interested in learning, collaborating on student projects and discovering new app ideas.</p><div class="actions"><a class="btn primary" href="mailto:your-email@example.com">Email me ↗</a><a class="btn" href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a></div></div>
+    <div>
+      <div class="contact-card"><small>IDENTITY</small><h4 style="margin-top:5px">Ishwarya</h4><p>Computer Science & Engineering · B.Tech 2nd Year</p></div>
+      <div class="contact-card"><small>FOCUS</small><h4 style="margin-top:5px">App Development</h4><p>Creative UI · Useful products · Continuous learning</p></div>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+<footer>© 2026 Ishwarya · Crafted with HTML, CSS & JavaScript · GitHub Pages ready</footer>
+
+<script>
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[];
+function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);stars=Array.from({length:Math.min(170,Math.floor(innerWidth/7))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.5+.2,a:Math.random()}))}
+function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);for(const s of stars){s.a+=.008;ctx.globalAlpha=.25+.35*(Math.sin(s.a)+1)/2;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle="#b9eaff";ctx.fill()}requestAnimationFrame(draw)}
+addEventListener('resize',resize);resize();draw();
+
+document.getElementById('menu').onclick=()=>document.getElementById('navlinks').classList.toggle('open');
+document.querySelectorAll('.navlinks a').forEach(a=>a.onclick=()=>document.getElementById('navlinks').classList.remove('open'));
+
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+
+document.querySelectorAll('.tilt').forEach(card=>{
+ card.addEventListener('pointermove',e=>{
+   if(innerWidth<821)return;
+   const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+   card.style.transform=`perspective(800px) rotateX(${-y*6}deg) rotateY(${x*7}deg) translateY(-3px)`;
+ });
+ card.addEventListener('pointerleave',()=>card.style.transform='');
+});
+const cursor=document.getElementById('cursor');
+addEventListener('pointermove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
+</script>
+</body>
+</html>
